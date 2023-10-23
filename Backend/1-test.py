@@ -23,16 +23,48 @@ class Generator(nn.Module):
         # our Generator subclass.
         super(Generator, self).__init__()
         
-        # stack different layers sequentially
-        self.main = nn.Sequential(
-            # nz is the input 
-            nn.ConvTranspose2d(in_channels=nz, 
-                               out_channels=ngf*8, 
-                               kernel_size=4, 
-                               stride=1, 
-                               padding=0, 
-                               bias=False),
-            nn.BatchNorm2d(ngf*8),
-            nn.ReLU(True)
+       # Defining individual layers
+        
+        # Input 512 x 4 x 4 
+        self.convT1 = nn.ConvTranspose2d(in_channels=512, 
+                                          out_channels=ngf*4, 
+                                          kernel_size=4, 
+                                          stride=2, 
+                                          padding=1, 
+                                          bias=False)
+        self.bn1 = nn.BatchNorm2d(ngf*4)
+        
+        # (ngf*4) x 8 x 8 -> in this example 256x8x8, because im using ngf=64
+        self.convT2 = nn.ConvTranspose2d(in_channels=ngf*4,
+                                          out_channels=ngf*2,
+                                          kernel_size=4,
+                                          stride=2,
+                                          padding=1,
+                                          bias=False)
+        self.bn2 = nn.BatchNorm2d(ngf*2)
+        
+        # (ngf*2) x 16 x 16 -> 128x16x16
+        self.dconvT3 = nn.ConvTranspose2d(in_channels=ngf*2, 
+                                          out_channels=ngf,
+                                          kernel_size=4,
+                                          stride=2,
+                                          padding=1,
+                                          bias=False)
+        self.bn3 = nn.BatchNorm2d(ngf)
+        
+        # ngf x 32 x 32 -> 64x32x32
+        self.convT4 = nn.ConvTranspose2d(in_channels=ngf,
+                                          out_channels=nc,
+                                          kernel_size=4,
+                                          stride=2,
+                                          padding=1,
+                                          bias=False)
+        
+        # Final convolution layer
+        self.conv = nn.Conv2d(nc, nc, 3, 1, 1)
 
-        )
+
+        def forward(self, x):
+            x = self.deconv1(x)
+            x = self.bn1(x)
+            x = nn.ReLU(True)(x)
