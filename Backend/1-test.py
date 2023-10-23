@@ -31,6 +31,8 @@ class Generator(nn.Module):
                                kernel_size=4, 
                                stride=1, 
                                padding=0, 
-                               bias=False)
+                               bias=False),
+            nn.BatchNorm2d(ngf*8),
+            nn.ReLU(True)
 
         )
