@@ -25,5 +25,12 @@ class Generator(nn.Module):
         
         # stack different layers sequentially
         self.main = nn.Sequential(
+            # nz is the input 
+            nn.ConvTranspose2d(in_channels=nz, 
+                               out_channels=ngf*8, 
+                               kernel_size=4, 
+                               stride=1, 
+                               padding=0, 
+                               bias=False)
 
         )
