@@ -23,6 +23,7 @@ class Generator(nn.Module):
         # our Generator subclass.
         super(Generator, self).__init__()
         
+
        # Defining individual layers
         
         # Input 512 x 4 x 4 
@@ -44,7 +45,7 @@ class Generator(nn.Module):
         self.bn2 = nn.BatchNorm2d(ngf*2)
         
         # (ngf*2) x 16 x 16 -> 128x16x16
-        self.dconvT3 = nn.ConvTranspose2d(in_channels=ngf*2, 
+        self.convT3 = nn.ConvTranspose2d(in_channels=ngf*2, 
                                           out_channels=ngf,
                                           kernel_size=4,
                                           stride=2,
@@ -62,9 +63,51 @@ class Generator(nn.Module):
         
         # Final convolution layer
         self.conv = nn.Conv2d(nc, nc, 3, 1, 1)
+        self.bn4 = nn.BatchNorm2d(nc)
 
 
-        def forward(self, x):
-            x = self.deconv1(x)
-            x = self.bn1(x)
-            x = nn.ReLU(True)(x)
+        self.linear = nn.Linear(100, 4*4*512)
+
+
+    def forward(self, x):
+        x = self.linear(x)
+        x = torch.reshape(x, (x.shape[0], 512, 4, 4))
+        x = self.convT1(x)
+        print(x.shape)
+        x = self.bn1(x)
+        x = nn.ReLU(True)(x)
+
+        x = self.convT2(x)
+        print(x.shape)
+        x = self.bn2(x)
+        x = nn.ReLU(True)(x)
+
+        x = self.convT3(x)
+        print(x.shape)
+        x = self.bn3(x)
+        x = nn.ReLU(True)(x)
+
+        x = self.convT4(x)
+        print(x.shape)
+        x = self.bn4(x)
+        x = nn.ReLU(True)(x)
+
+        x = self.conv(x)
+        print(x.shape)
+        x = nn.Tanh()(x)
+    
+        return x
+
+
+
+nz = 100
+generator = Generator(nz=nz, ngf=64, nc=3)
+
+# Random vector
+random_vector = torch.randn(1, nz)
+
+
+generated_image = generator(random_vector)
+
+# check the size
+print(generated_image.size())  # must be torch.Size([1, 3, 64, 64])
