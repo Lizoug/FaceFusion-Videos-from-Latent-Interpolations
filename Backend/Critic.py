@@ -56,8 +56,11 @@ class Critic(nn.Module):
         x = self.lr4(self.bn4(self.conv4(x)))
         
         # Flatten
+        # Reshape the tensor to [Batch size, ndf*8*4*4].
+        # The '-1' infers the batch size dimension from the tensor.
         x = x.view(-1, ndf*8*4*4)
-        
+
+        # Pass through the linear layer
         x = self.fc(x)
         return x
         
