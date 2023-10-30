@@ -23,11 +23,11 @@ generator = Generator(nz=nz, ngf=ngf, nc=3)
 
 # Set up Loss function (Wasserstein loss)
 def critic_loss(real_output, fake_output):
-    return torch.mean(real_output) - torch.mean(fake_output)
+    return torch.mean(real_output) - torch.mean(fake_output) #maximieren
 
 # Set up the generator loss
 def generator_loss(fake_output):
-    return -torch.mean(fake_output)
+    return -torch.mean(fake_output) # min wegen -
 
 # Set up Optimizers
 # By setting this value close to 1, the optimizer gives more 
