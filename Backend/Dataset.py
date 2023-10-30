@@ -27,35 +27,35 @@ def convert_img_to_tensor(img_path, applied_transforms):
     return tensor_image
 
 
+if __name__ == "__main__":
+    IMG_SIZE = 64
+    DATASET_DIR = r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project_Data\img_align_celeba\img_align_celeba"
 
-IMG_SIZE = 64
-DATASET_DIR = r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project_Data\img_align_celeba\img_align_celeba"
+    image_paths = get_image_path(DATASET_DIR)
+    transform_pipeline = transform(IMG_SIZE)
 
-image_paths = get_image_path(DATASET_DIR)
-transform_pipeline = transform(IMG_SIZE)
+    # Convert all images in the dataset to tensors
+    dataset = [convert_img_to_tensor(img_path, transform_pipeline) for img_path in image_paths]
 
-# Convert all images in the dataset to tensors
-dataset = [convert_img_to_tensor(img_path, transform_pipeline) for img_path in image_paths]
+    # Dataloader creation
+    BATCH_SIZE = 32
+    data_loader = DataLoader(dataset=dataset, 
+                            batch_size=BATCH_SIZE, 
+                            shuffle=True)
 
-# Dataloader creation
-BATCH_SIZE = 32
-data_loader = DataLoader(dataset=dataset, 
-                         batch_size=BATCH_SIZE, 
-                         shuffle=True)
+    print(f"Total batches in dataloader: {len(data_loader)} with batch size of {BATCH_SIZE}")
 
-print(f"Total batches in dataloader: {len(data_loader)} with batch size of {BATCH_SIZE}")
+    # Display sample images
+    sample_imgs = next(iter(data_loader))
 
-# Display sample images
-sample_imgs = next(iter(data_loader))
+    # Check the shape
+    print(sample_imgs.shape)
 
-# Check the shape
-print(sample_imgs.shape)
-
-# Plotting
-figure, axes = plt.subplots(3, 5, figsize=(14, 9))
-for idx, ax in enumerate(axes.flat):
-    image_array = sample_imgs[idx].numpy()
-    image_array = np.transpose(image_array, (1, 2, 0))
-    ax.imshow(image_array)
-    ax.axis('off')
-plt.show()
+    # Plotting
+    figure, axes = plt.subplots(3, 5, figsize=(14, 9))
+    for idx, ax in enumerate(axes.flat):
+        image_array = sample_imgs[idx].numpy()
+        image_array = np.transpose(image_array, (1, 2, 0))
+        ax.imshow(image_array)
+        ax.axis('off')
+    plt.show()
