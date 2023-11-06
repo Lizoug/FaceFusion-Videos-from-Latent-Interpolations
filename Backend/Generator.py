@@ -73,27 +73,27 @@ class Generator(nn.Module):
         x = self.linear(x)
         x = torch.reshape(x, (x.shape[0], 512, 4, 4))
         x = self.convT1(x)
-        print(x.shape)
+        #print(x.shape)
         x = self.bn1(x)
         x = nn.ReLU(True)(x)
 
         x = self.convT2(x)
-        print(x.shape)
+        #print(x.shape)
         x = self.bn2(x)
         x = nn.ReLU(True)(x)
 
         x = self.convT3(x)
-        print(x.shape)
+        #print(x.shape)
         x = self.bn3(x)
         x = nn.ReLU(True)(x)
 
         x = self.convT4(x)
-        print(x.shape)
+        #print(x.shape)
         x = self.bn4(x)
         x = nn.ReLU(True)(x)
 
         x = self.conv(x)
-        print(x.shape)
+        #print(x.shape)
         x = nn.Tanh()(x)
     
         return x
@@ -110,4 +110,4 @@ random_vector = torch.randn(1, nz)
 generated_image = generator(random_vector)
 
 # check the size
-print(generated_image.size())  # must be torch.Size([1, 3, 64, 64])
+#print(generated_image.size())  # must be torch.Size([1, 3, 64, 64])
