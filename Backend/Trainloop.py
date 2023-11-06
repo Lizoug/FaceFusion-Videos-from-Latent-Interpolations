@@ -72,7 +72,10 @@ class Trainer:
         # Training loop
         for epoch in range(self.num_epochs):
                 # Wrap the data loader with tqdm for a progress bar
-                for i, real_images in enumerate(tqdm(self.data_loader, desc=f"Epoch {epoch+1}/{self.num_epochs}")):
+                bar = tqdm(self.data_loader, desc=f"Epoch {epoch+1}/{self.num_epochs}")
+                criticloss = 0
+                cnt = 0
+                for i, real_images in enumerate(bar):
                     
                     # Transfer real images to the device
                     real_images = real_images.to(self.device)
@@ -101,7 +104,10 @@ class Trainer:
                     c_loss = self.critic_loss(outputs_real, outputs_fake)
                     c_loss.backward()
                     self.optimizerD.step()
-                    
+
+                    criticloss += c_loss.item()
+                    cnt += batch_size
+
                     # Clip the critic's weights to ensure 1-Lipschitz condition
                     for p in self.critic.parameters():
                         p.data.clamp_(-0.01, 0.01)
@@ -130,6 +136,7 @@ class Trainer:
                     if self.batch_count % self.save_interval == 0:
                         self.checkpoint_handler.save(self.generator, self.critic, self.optimizerG, self.optimizerD, self.batch_count)
 
+                    bar.set_description(f"critic loss: {criticloss/cnt}")
 
                 # Print epoch results
                 print(f"Epoch [{epoch+1}/{self.num_epochs}] | Critic Loss: {c_loss.item()} | Generator Loss: {g_loss.item()}")
