@@ -1,14 +1,14 @@
 import torch
-from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from Dataset import CelebADataset, transform
 from Critic import Critic
 from Generator import Generator
 from tqdm import tqdm
+from Checkpoints import Checkpoint
 
 
 class Trainer:
-    def __init__(self, chkpt_path="checkpoint.pth", save_interval=50):
+    def __init__(self, chkpt_path="model.pt", save_interval=10):
         # Hyperparameters
         self.lr = 0.0002
         self.beta1 = 0.5
@@ -34,31 +34,27 @@ class Trainer:
         self.critic = Critic(nc=3, ndf=self.ndf).to(self.device)
         self.generator = Generator(nz=self.nz, ngf=self.ngf, nc=3).to(self.device)
 
-       
-
         # Set up Optimizers
         # By setting this value close to 1, the optimizer gives more 
         # weight to past squared gradients, making the estimate more stable over time.
         self.optimizerD = torch.optim.Adam(self.critic.parameters(), lr=self.lr, betas=(self.beta1, 0.999))
         self.optimizerG = torch.optim.Adam(self.generator.parameters(), lr=self.lr, betas=(self.beta1, 0.999))
         
-        # try:
-        #     chkpt= torch.load("dddd")
-        #     self.critic.load_state_dict(chkpt["critic_state"])
-        # except:
-        #     pass
-        self.chkpt_path = "model.pt"
+        # Initialize the checkpoint handler
+        self.checkpoint_handler = Checkpoint(chkpt_path)
         self.save_interval = save_interval
         self.batch_count = 0
 
-        try:
-            chkpt = torch.load(self.chkpt_path)
-            self.generator.load_state_dict(chkpt["generator_state"])
-            self.critic.load_state_dict(chkpt["critic_state"])
-            self.optimizerG.load_state_dict(chkpt["optimG_state"])
-            self.optimizerD.load_state_dict(chkpt["optimD_state"])
-            self.batch_count = chkpt["batch_count"]
-        except:
+        # Load checkpoint if available
+        generator_state, critic_state, optimG_state, optimD_state, batch_count = self.checkpoint_handler.load()
+        
+        if generator_state is not None:
+            self.generator.load_state_dict(generator_state)
+            self.critic.load_state_dict(critic_state)
+            self.optimizerG.load_state_dict(optimG_state)
+            self.optimizerD.load_state_dict(optimD_state)
+            self.batch_count = batch_count
+        else:
             print("Could not find checkpoint, starting from scratch")
 
     # Set up Loss function (Wasserstein loss)
@@ -128,18 +124,13 @@ class Trainer:
                     g_loss.backward()
                     # Updates the weights
                     self.optimizerG.step()
-                    
-                     # Checkpointing
+
+                    # Checkpointing
                     self.batch_count += 1
                     if self.batch_count % self.save_interval == 0:
-                        torch.save({
-                            "generator_state": self.generator.state_dict(),
-                            "critic_state": self.critic.state_dict(),
-                            "optimG_state": self.optimizerG.state_dict(),
-                            "optimD_state": self.optimizerD.state_dict(),
-                            "batch_count": self.batch_count
-                        }, self.chkpt_path)
-                        
+                        self.checkpoint_handler.save(self.generator, self.critic, self.optimizerG, self.optimizerD, self.batch_count)
+
+
                 # Print epoch results
                 print(f"Epoch [{epoch+1}/{self.num_epochs}] | Critic Loss: {c_loss.item()} | Generator Loss: {g_loss.item()}")
 
