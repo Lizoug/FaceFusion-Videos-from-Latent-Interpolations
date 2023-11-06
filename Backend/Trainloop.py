@@ -5,6 +5,8 @@ from Critic import Critic
 from Generator import Generator
 from tqdm import tqdm
 from Checkpoints import Checkpoint
+from torch.utils.tensorboard import SummaryWriter
+
 
 
 class Trainer:
@@ -42,6 +44,8 @@ class Trainer:
         
         # Initialize the checkpoint handler
         self.checkpoint_handler = Checkpoint(chkpt_path)
+        self.writer = SummaryWriter()
+
         self.save_interval = save_interval
         self.batch_count = 0
 
@@ -111,6 +115,7 @@ class Trainer:
                     # Clip the critic's weights to ensure 1-Lipschitz condition
                     for p in self.critic.parameters():
                         p.data.clamp_(-0.01, 0.01)
+                
                     
                     # -----------------------------------------
                     # Train Generator
@@ -131,6 +136,19 @@ class Trainer:
                     # Updates the weights
                     self.optimizerG.step()
 
+                    # -----------------------------------------
+                    # Log images and metrics to TensorBoard
+                    # -----------------------------------------
+                    if i % 50 == 0:  # Log every 100 batches
+                        # Log real and fake images
+                        self.writer.add_images('Real_Images', real_images, self.batch_count)
+                        self.writer.add_images('Fake_Images', fake_images.detach(), self.batch_count)  # Use detach() to avoid tracking computation
+
+                        # Log losses
+                        self.writer.add_scalar('Critic_Loss', c_loss.item(), self.batch_count)
+                        self.writer.add_scalar('Generator_Loss', g_loss.item(), self.batch_count)
+
+                        
                     # Checkpointing
                     self.batch_count += 1
                     if self.batch_count % self.save_interval == 0:
