@@ -12,8 +12,8 @@ from torch.utils.tensorboard import SummaryWriter
 class Trainer:
     def __init__(self, chkpt_path="model.pt", save_interval=10):
         # Hyperparameters
-        self.lr = 0.0002
-        self.beta1 = 0.5
+        self.lr = 0.00005
+        self.beta1 = 0.9
         self.num_epochs = 10
         self.batch_size = 32
         self.nz = 100
@@ -64,7 +64,7 @@ class Trainer:
     # Set up Loss function (Wasserstein loss)
     def critic_loss(self, real_output, fake_output):
         """Calculate the critic's loss based on the Wasserstein distance."""
-        return torch.mean(real_output) - torch.mean(fake_output) #maximieren
+        return torch.mean(fake_output) - torch.mean(real_output) #maximieren
 
     # Set up the generator loss
     def generator_loss(self, fake_output):
@@ -148,7 +148,7 @@ class Trainer:
                         self.writer.add_scalar('Critic_Loss', c_loss.item(), self.batch_count)
                         self.writer.add_scalar('Generator_Loss', g_loss.item(), self.batch_count)
 
-                        
+
                     # Checkpointing
                     self.batch_count += 1
                     if self.batch_count % self.save_interval == 0:
