@@ -6,7 +6,7 @@ from Generator import Generator
 from tqdm import tqdm
 from Checkpoints import Checkpoint
 from torch.utils.tensorboard import SummaryWriter
-
+import os
 
 
 class Trainer:
@@ -71,6 +71,17 @@ class Trainer:
         """Calculate the generator's loss based on the Wasserstein distance."""
         return -torch.mean(fake_output) # min wegen -
 
+    def save_model(self, model, filename):
+        """Save the entire model to a file in the 'Model' subdirectory."""
+        current_working_dir = os.getcwd()  # Get the current working directory
+        model_dir = os.path.join(current_working_dir, "Model")  # Path to the Model directory
+
+        # Create the Model directory if it does not exist
+        if not os.path.exists(model_dir):
+            os.makedirs(model_dir)
+
+        save_path = os.path.join(model_dir, f"{filename}_batch_{self.batch_count}.pt")
+        torch.save(model, save_path)
 
     def train(self):
         # Training loop
@@ -139,7 +150,7 @@ class Trainer:
                     # -----------------------------------------
                     # Log images and metrics to TensorBoard
                     # -----------------------------------------
-                    if i % 50 == 0:  # Log every 100 batches
+                    if i % 50 == 0:  # Log every 50 batches
                         # Log real and fake images
                         self.writer.add_images('Real_Images', real_images, self.batch_count)
                         self.writer.add_images('Fake_Images', fake_images.detach(), self.batch_count)  # Use detach() to avoid tracking computation
@@ -155,6 +166,12 @@ class Trainer:
                         self.checkpoint_handler.save(self.generator, self.critic, self.optimizerG, self.optimizerD, self.batch_count)
 
                     bar.set_description(f"critic loss: {criticloss/cnt}")
+
+                    # Save the model
+                    if self.batch_count % 10 == 0:
+                        self.save_model(self.generator, 'generator_model')
+                        self.save_model(self.critic, 'critic_model')
+
 
                 # Print epoch results
                 print(f"Epoch [{epoch+1}/{self.num_epochs}] | Critic Loss: {c_loss.item()} | Generator Loss: {g_loss.item()}")
