@@ -1,4 +1,4 @@
-model.pt
+*.pt
 runs/
 
 # Ignore the new JSON and .ply files generated
