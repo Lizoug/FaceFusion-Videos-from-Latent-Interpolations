@@ -101,7 +101,7 @@ class Generator(nn.Module):
 
 
 nz = 100
-generator = Generator(nz=nz, ngf=64, nc=3)
+generator = Generator(nz=nz, ngf=128, nc=3)
 
 # Random vector
 random_vector = torch.randn(1, nz)
