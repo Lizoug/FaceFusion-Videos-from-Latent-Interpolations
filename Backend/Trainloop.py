@@ -168,7 +168,7 @@ class Trainer:
                 bar.set_description(f"critic loss: {criticloss/cnt}")
 
                 # Save the model
-                if self.batch_count % 10 == 0:
+                if self.batch_count % 1000 == 0:
                     self.save_model(self.generator, 'generator_model')
                     self.save_model(self.critic, 'critic_model')
 
