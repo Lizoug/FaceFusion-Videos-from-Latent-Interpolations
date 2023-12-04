@@ -64,5 +64,5 @@ class Critic(nn.Module):
         x = self.fc(x)
         return x
         
-ndf = 128
+ndf = 64
 critic = Critic(nc=3, ndf=ndf)
