@@ -1,5 +1,8 @@
+generated_images/
+
 *.pt
 runs/
+*.mp4
 
 # Ignore the new JSON and .ply files generated
 *.ply
