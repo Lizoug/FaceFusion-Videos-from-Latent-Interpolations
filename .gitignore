@@ -1,5 +1,5 @@
 generated_images/
-
+interpolation_videos/
 *.pt
 runs/
 *.mp4
