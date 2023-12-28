@@ -23,50 +23,55 @@ class Generator(nn.Module):
         # our Generator subclass.
         super(Generator, self).__init__()
         
+        # Linear layer to transform the input latent vector into a suitable shape
+        self.linear = nn.Linear(nz, 4*4*512)
 
        # Defining individual layers
         
-        # Input 512 x 4 x 4 
+        # First transposed convolutional layer: Upscales from 4x4 to 8x8
         self.convT1 = nn.ConvTranspose2d(in_channels=512, 
-                                          out_channels=ngf*4, 
+                                          out_channels=ngf*8, 
                                           kernel_size=4, 
                                           stride=2, 
                                           padding=1, 
                                           bias=False)
-        self.bn1 = nn.BatchNorm2d(ngf*4)
+        self.bn1 = nn.BatchNorm2d(ngf*8)
+
+        # Second transposed convolutional layer: Upscales from 8x8 to 16x16
+        self.convT2 = nn.ConvTranspose2d(in_channels=ngf*8,
+                                          out_channels=ngf*4,
+                                          kernel_size=4,
+                                          stride=2,
+                                          padding=1,
+                                          bias=False)
+        self.bn2 = nn.BatchNorm2d(ngf*4)
         
-        # (ngf*4) x 8 x 8 -> in this example 256x8x8, because im using ngf=64
-        self.convT2 = nn.ConvTranspose2d(in_channels=ngf*4,
+        # Third transposed convolutional layer: Upscales from 16x16 to 32x32
+        self.convT3 = nn.ConvTranspose2d(in_channels=ngf*4, 
                                           out_channels=ngf*2,
                                           kernel_size=4,
                                           stride=2,
                                           padding=1,
                                           bias=False)
-        self.bn2 = nn.BatchNorm2d(ngf*2)
+        self.bn3 = nn.BatchNorm2d(ngf*2)
         
-        # (ngf*2) x 16 x 16 -> 128x16x16
-        self.convT3 = nn.ConvTranspose2d(in_channels=ngf*2, 
+        # Fourth transposed convolutional layer: Upscales from 32x32 to 64x64
+        self.convT4 = nn.ConvTranspose2d(in_channels=ngf*2,
                                           out_channels=ngf,
                                           kernel_size=4,
                                           stride=2,
                                           padding=1,
                                           bias=False)
-        self.bn3 = nn.BatchNorm2d(ngf)
+        self.bn4 = nn.BatchNorm2d(ngf)
         
-        # ngf x 32 x 32 -> 64x32x32
-        self.convT4 = nn.ConvTranspose2d(in_channels=ngf,
-                                          out_channels=nc,
-                                          kernel_size=4,
-                                          stride=2,
-                                          padding=1,
-                                          bias=False)
-        
-        # Final convolution layer
-        self.conv = nn.Conv2d(nc, nc, 3, 1, 1)
-        self.bn4 = nn.BatchNorm2d(nc)
+        # Fifth transposed convolutional layer: Upscales from 64x64 to 128x128
+        self.convT5 = nn.ConvTranspose2d(ngf, ngf//2, kernel_size=4, stride=2, padding=1, bias=False)
+        self.bn5 = nn.BatchNorm2d(ngf//2)
+
+        # Final convolution layer: Adjusts the channel size to match the target image channels
+        self.conv = nn.Conv2d(ngf//2, nc, 3, 1, 1)
 
 
-        self.linear = nn.Linear(100, 4*4*512)
 
 
     def forward(self, x):
@@ -92,22 +97,24 @@ class Generator(nn.Module):
         x = self.bn4(x)
         x = nn.ReLU(True)(x)
 
+        x = self.convT5(x)
+        #print(x.shape)
+        x = self.bn5(x)
+        x = nn.ReLU(True)(x)
+
         x = self.conv(x)
         #print(x.shape)
-        x = nn.Tanh()(x)
+        x = nn.Tanh()(x) # Output layer with Tanh activation
     
         return x
 
 
 
 nz = 100
-generator = Generator(nz=nz, ngf=64, nc=3)
+ngf = 128
+generator = Generator(nz=nz, ngf=ngf, nc=3)
 
 # Random vector
 random_vector = torch.randn(1, nz)
-
-
 generated_image = generator(random_vector)
 
-# check the size
-#print(generated_image.size())  # must be torch.Size([1, 3, 64, 64])

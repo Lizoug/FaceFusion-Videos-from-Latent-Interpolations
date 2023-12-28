@@ -35,7 +35,7 @@ def transform(size):
 
 
 if __name__ == "__main__":
-    IMG_SIZE = 64
+    IMG_SIZE = 128
     DATASET_DIR = r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project_Data\img_align_celeba\img_align_celeba"
 
     transform_pipeline = transform(IMG_SIZE)
