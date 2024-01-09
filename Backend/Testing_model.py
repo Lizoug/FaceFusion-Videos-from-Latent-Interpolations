@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from Generator import Generator  # Make sure this import path is correct
 
 # Load the pre-trained Generator model and set it to evaluation mode
-generator = torch.load(r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project\FaceFusion-Videos-from-Latent-Interpolations\Backend\Model\generator_model_batch_378000.pt")
+generator = torch.load(r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Model_128x128_end\generator_model_batch_3918000.pt")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 generator = generator.to(device)
 generator.eval()

@@ -17,8 +17,8 @@ class Trainer:
         self.num_epochs = 10
         self.batch_size = 32
         self.nz = 100
-        self.ngf = 64
-        self.ndf = 64
+        self.ngf = 128
+        self.ndf = 128
 
         self.DATASET_DIR = r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project_Data\img_align_celeba\img_align_celeba"
 
@@ -28,7 +28,7 @@ class Trainer:
 
         # Set up DataLoader
         self.data_loader = DataLoader(CelebADataset(self.DATASET_DIR, 
-                                                    transform=transform(64)), 
+                                                    transform=transform(128)), 
                                                     batch_size=self.batch_size, 
                                                     shuffle=True)
         
