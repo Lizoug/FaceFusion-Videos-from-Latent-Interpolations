@@ -4,11 +4,11 @@ from Generator import Generator
 import numpy as np
 import cv2
 import os
-import argparse
+from PIL import Image
 
 def generate_latent_vector(seed, size):
     np.random.seed(seed)
-    return torch.from_numpy(np.random.normal(0, 1, size)).float()
+    return torch.randn(size).float() # Generate the vector
 
 def lerp(val, v1, v2):
     """Linear interpolation between low and high with weighting val."""
@@ -56,48 +56,76 @@ def create_video(image_folder, video_name, fps):
     cv2.destroyAllWindows()
     video.release()
 
+def create_gif(image_folder, gif_name, fps):
+    images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
+    frames = [Image.open(os.path.join(image_folder, image)) for image in sorted(images)]
 
-def main():
-    # Hardcoded seeds
-    seed1 = 123  
-    seed2 = 456 
-    steps = 3000  
-    fps = 30     # Example Frames per Second for the video
+    frame_duration = int(1000 / fps)  # Duration of each frame in milliseconds
+    frames[0].save(gif_name, format='GIF', append_images=frames[1:], save_all=True, duration=frame_duration, loop=0)
 
+
+def main(main, steps, gif_fps):
     # Define the device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the entire pretrained Generator model
-    generator = torch.load(r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project\FaceFusion-Videos-from-Latent-Interpolations\Backend\Model\generator_model_batch_636000.pt")
+    generator = torch.load(r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Model_128x128_end\generator_model_batch_3924000.pt")
     generator.to(device).eval()
 
-    # Generate latent vectors and move them to the same device as the model
-    z1 = generate_latent_vector(seed1, 100).to(device)
-    z2 = generate_latent_vector(seed2, 100).to(device)
 
-    # Image generation
-    image_folder = "generated_images"
-    os.makedirs(image_folder, exist_ok=True)
+    # Base output directory
+    base_output_dir = "interpolation_videos"
+    os.makedirs(base_output_dir, exist_ok=True)
 
-    for i in range(steps):
-        val = i / (steps - 1)
-        z = lerp(val, z1, z2).unsqueeze(0) # The function unsqueeze(0) adds an extra dimension to make the vector compatible with the expected input format of the generator.
-        # Ensures that PyTorch does not compute gradients for the following operations. 
-        # This is useful for saving memory and speeding up computations when only making 
-        # predictions (here: generating an image) and not updating the model
-        with torch.no_grad():
-            generated_image = generator(z)
-        # squeeze(0) removes the extra dimension.
-        # detach() separates the image from the current computation graph to save memory.
-        # transpose(1, 2, 0) changes the dimension order to convert the image format from PyTorch's 
-        # (Channel, Height, Width) to the format expected by OpenCV (Height, Width, Channel).
-        image = generated_image.squeeze(0).detach().cpu().numpy().transpose(1, 2, 0)
-        # scales the pixel values, which were originally between -1 and 1, to the range of 0 to 255.
-        image = ((image + 1) / 2 * 255).clip(0, 255).astype(np.uint8)
-        cv2.imwrite(os.path.join(image_folder, f"image_{i:04d}.png"), image)
+    #video_folder = os.path.join(base_output_dir, "videos")
+    #os.makedirs(video_folder, exist_ok=True)
 
-    # Create the video
-    create_video(image_folder, "latent_space_exploration.mp4", fps)
+     # For creating the GIF
+    gif_folder = os.path.join(base_output_dir, "gifs")
+    os.makedirs(gif_folder, exist_ok=True)
+    
+    for seed_pair in seeds:
+        seed1, seed2 = seed_pair
+        # Generate latent vectors and move them to the same device as the model
+        #z1 = generate_latent_vector(seed1, 100).to(device)
+        #z2 = generate_latent_vector(seed2, 100).to(device)
+        z1 = generate_latent_vector(seed1, (1, 100)).to(device)
+        z2 = generate_latent_vector(seed2, (1, 100)).to(device)
+
+        # Image generation
+        image_folder = os.path.join(base_output_dir, f"images_seed_{seed1}_to_{seed2}")
+        os.makedirs(image_folder, exist_ok=True)
+
+        for i in range(steps):
+            val = i / (steps - 1)
+            z = lerp(val, z1, z2).unsqueeze(0) # The function unsqueeze(0) adds an extra dimension to make the vector compatible with the expected input format of the generator.
+            # Ensures that PyTorch does not compute gradients for the following operations. 
+            # This is useful for saving memory and speeding up computations when only making 
+            # predictions (here: generating an image) and not updating the model
+            with torch.no_grad():
+                generated_image = generator(z)
+            # squeeze(0) removes the extra dimension.
+            # detach() separates the image from the current computation graph to save memory.
+            # transpose(1, 2, 0) changes the dimension order to convert the image format from PyTorch's 
+            # (Channel, Height, Width) to the format expected by OpenCV (Height, Width, Channel).
+            image = generated_image.squeeze(0).detach().cpu().numpy().transpose(1, 2, 0)
+            # scales the pixel values, which were originally between -1 and 1, to the range of 0 to 255.
+            image = ((image + 1) / 2 * 255).clip(0, 255).astype(np.uint8)
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)  # Convert from RGB to BGR
+            cv2.imwrite(os.path.join(image_folder, f"image_{i:04d}.png"), image)
+
+       # video_name = os.path.join(video_folder, f"latent_space_exploration_seed_{seed1}_to_{seed2}.mp4")
+       # create_video(image_folder, video_name, video_fps)
+
+        gif_name = os.path.join(gif_folder, f"latent_space_exploration_seed_{seed1}_to_{seed2}.gif")
+        create_gif(image_folder, gif_name, gif_fps)
 
 if __name__ == "__main__":
-    main()
+    #seeds = [(1, 2), (60, 80), (333, 666)]  #  all the seed pairs
+    seeds = [(np.random.randint(0, 500), np.random.randint(0, 1000)) for _ in range(50)]
+
+    steps = 50  # Fewer steps to make the process faster
+    #video_fps = 60  # Frame rate for video
+    gif_fps = 200    # Frame rate for GIF; adjust this to change GIF speed
+
+    main(seeds, steps, gif_fps)
