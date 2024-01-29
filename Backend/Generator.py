@@ -65,7 +65,12 @@ class Generator(nn.Module):
         self.bn4 = nn.BatchNorm2d(ngf)
         
         # Fifth transposed convolutional layer: Upscales from 64x64 to 128x128
-        self.convT5 = nn.ConvTranspose2d(ngf, ngf//2, kernel_size=4, stride=2, padding=1, bias=False)
+        self.convT5 = nn.ConvTranspose2d(in_channels=ngf, 
+                                         out_channels=ngf//2, 
+                                         kernel_size=4, 
+                                         stride=2, 
+                                         padding=1, 
+                                         bias=False)
         self.bn5 = nn.BatchNorm2d(ngf//2)
 
         # Final convolution layer: Adjusts the channel size to match the target image channels
