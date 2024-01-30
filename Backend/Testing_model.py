@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from Generator import Generator  # Make sure this import path is correct
+
 
 # Load the pre-trained Generator model and set it to evaluation mode
 generator = torch.load(r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Model_128x128_end\generator_model_batch_3918000.pt")
