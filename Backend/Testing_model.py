@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -11,11 +10,12 @@ generator.eval()
 
 # Generate random latent vectors
 nz = 100  # Size of the latent vector
-random_vectors = torch.randn(10, nz, device=device)  # Create 10 random latent vectors
+random_vectors = torch.randn(10, nz, device=device)  # Create 10 random vectors
 
 # Generate images from the random vectors
 with torch.no_grad():
     generated_images = generator(random_vectors)
+
 
 # Function to display images
 def show_images(images):
@@ -28,6 +28,7 @@ def show_images(images):
         ax.imshow(img.clip(0, 1))
         ax.axis('off')
     plt.show()
+
 
 # Display the generated images
 show_images(generated_images[:10])
