@@ -10,7 +10,7 @@ class Generator(nn.Module):
         nz in many DCGAN implementations is 100.
 
         nc: Number of channels in the training images.
- 
+
         ngf: (Generator Feature Map Size): This parameter determines the depth
         of the feature maps that pass through the generator. It affects the
         complexity and size of the generator model. A typical value
@@ -30,51 +30,61 @@ class Generator(nn.Module):
 
         # Defining individual layers
         # First transposed convolutional layer: Upscales from 4x4 to 8x8
-        self.convT1 = nn.ConvTranspose2d(in_channels=512,
-                                          out_channels=ngf*8,
-                                          kernel_size=4,
-                                          stride=2,
-                                          padding=1,
-                                          bias=False)
+        self.convT1 = nn.ConvTranspose2d(
+            in_channels=512,
+            out_channels=ngf*8,
+            kernel_size=4,
+            stride=2,
+            padding=1,
+            bias=False
+            )
         self.bn1 = nn.BatchNorm2d(ngf*8)
 
         # Second transposed convolutional layer: Upscales from 8x8 to 16x16
-        self.convT2 = nn.ConvTranspose2d(in_channels=ngf*8,
-                                          out_channels=ngf*4,
-                                          kernel_size=4,
-                                          stride=2,
-                                          padding=1,
-                                          bias=False)
+        self.convT2 = nn.ConvTranspose2d(
+            in_channels=ngf*8,
+            out_channels=ngf*4,
+            kernel_size=4,
+            stride=2,
+            padding=1,
+            bias=False
+            )
         self.bn2 = nn.BatchNorm2d(ngf*4)
 
         # Third transposed convolutional layer: Upscales from 16x16 to 32x32
-        self.convT3 = nn.ConvTranspose2d(in_channels=ngf*4,
-                                          out_channels=ngf*2,
-                                          kernel_size=4,
-                                          stride=2,
-                                          padding=1,
-                                          bias=False)
+        self.convT3 = nn.ConvTranspose2d(
+            in_channels=ngf*4,
+            out_channels=ngf*2,
+            kernel_size=4,
+            stride=2,
+            padding=1,
+            bias=False
+            )
         self.bn3 = nn.BatchNorm2d(ngf*2)
 
         # Fourth transposed convolutional layer: Upscales from 32x32 to 64x64
-        self.convT4 = nn.ConvTranspose2d(in_channels=ngf*2,
-                                          out_channels=ngf,
-                                          kernel_size=4,
-                                          stride=2,
-                                          padding=1,
-                                          bias=False)
+        self.convT4 = nn.ConvTranspose2d(
+            in_channels=ngf*2,
+            out_channels=ngf,
+            kernel_size=4,
+            stride=2,
+            padding=1,
+            bias=False
+            )
         self.bn4 = nn.BatchNorm2d(ngf)
 
         # Fifth transposed convolutional layer: Upscales from 64x64 to 128x128
-        self.convT5 = nn.ConvTranspose2d(in_channels=ngf,
-                                         out_channels=ngf//2,
-                                         kernel_size=4,
-                                         stride=2,
-                                         padding=1,
-                                         bias=False)
+        self.convT5 = nn.ConvTranspose2d(
+            in_channels=ngf,
+            out_channels=ngf//2,
+            kernel_size=4,
+            stride=2,
+            padding=1,
+            bias=False
+            )
         self.bn5 = nn.BatchNorm2d(ngf//2)
 
-        # Final convolution layer: Adjusts the channel size to match 
+        # Final convolution layer: Adjusts the channel size to match
         # the target image channels
         self.conv = nn.Conv2d(ngf//2, nc, 3, 1, 1)
 
