@@ -26,17 +26,22 @@ class Trainer:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         # Set up DataLoader
-        self.data_loader = DataLoader(CelebADataset(self.DATASET_DIR, 
-                                                    transform=transform(128)), 
-                                                    batch_size=self.batch_size, 
-                                                    shuffle=True)
-        
+        self.data_loader = DataLoader(CelebADataset(
+            self.DATASET_DIR,
+            transform=transform(128)),
+            batch_size=self.batch_size,
+            shuffle=True
+            )
+
         # Initialize networks
         self.critic = Critic(nc=3, ndf=self.ndf).to(self.device)
-        self.generator = Generator(nz=self.nz, ngf=self.ngf, nc=3).to(self.device)
+        self.generator = Generator(
+            nz=self.nz,
+            ngf=self.ngf,
+            nc=3).to(self.device)
 
         # Set up Optimizers
-        # By setting this value close to 1, the optimizer gives more 
+        # By setting this value close to 1, the optimizer gives more
         # weight to past squared gradients, making the estimate more stable over time.
         self.optimizerD = torch.optim.Adam(self.critic.parameters(), lr=self.lr, betas=(self.beta1, 0.999))
         self.optimizerG = torch.optim.Adam(self.generator.parameters(), lr=self.lr, betas=(self.beta1, 0.999))
@@ -63,7 +68,7 @@ class Trainer:
     # Set up Loss function (Wasserstein loss)
     def critic_loss(self, real_output, fake_output):
         """Calculate the critic's loss based on the Wasserstein distance."""
-        return torch.mean(fake_output) - torch.mean(real_output) #maximieren
+        return torch.mean(fake_output) - torch.mean(real_output)  # maximieren
 
     # Set up the generator loss
     def generator_loss(self, fake_output):
@@ -90,30 +95,32 @@ class Trainer:
             criticloss = 0
             cnt = 0
             for i, real_images in enumerate(bar):
-                
+
                 # Transfer real images to the device
                 real_images = real_images.to(self.device)
                 batch_size = real_images.size(0)
-                
+
                 # -----------------------------------------
                 # Train Critic
                 # -----------------------------------------
-                
-                # reseting the gradients of the optimizer's managed parameters to zero, 
-                # preventing accumulation of gradients across multiple training iterations.
+
+                # reseting the gradients of the optimizer's managed parameters
+                # to zero, preventing accumulation of gradients across
+                # multiple training iterations.
                 self.optimizerD.zero_grad()
-                
+
                 # Compute loss with real images
                 outputs_real = self.critic(real_images)
-                
+
                 # Generate fake images
                 z = torch.randn(batch_size, self.nz).to(self.device)
                 fake_images = self.generator(z)
-                
+
                 # Compute loss with fake images
-                # prevent the generator from updating, ensuring only the discriminator learns from the data
+                # prevent the generator from updating, ensuring only the
+                # discriminator learns from the data
                 outputs_fake = self.critic(fake_images.detach())
-                
+
                 # Get critic loss and perform backward propagation
                 c_loss = self.critic_loss(outputs_real, outputs_fake)
                 c_loss.backward()
@@ -125,21 +132,20 @@ class Trainer:
                 # Clip the critic's weights to ensure 1-Lipschitz condition
                 for p in self.critic.parameters():
                     p.data.clamp_(-0.01, 0.01)
-            
-                
+
                 # -----------------------------------------
                 # Train Generator
                 # -----------------------------------------
-                
+
                 self.optimizerG.zero_grad()
-                
+
                 # Generate fake images
                 z = torch.randn(batch_size, self.nz).to(self.device)
                 fake_images = self.generator(z)
-                
+
                 # Compute loss with fake images
                 outputs = self.critic(fake_images)
-                
+
                 # Get generator loss and perform backward propagation
                 g_loss = self.generator_loss(outputs)
                 g_loss.backward()
@@ -151,18 +157,36 @@ class Trainer:
                 # -----------------------------------------
                 if i % 50 == 0:  # Log every 50 batches
                     # Log real and fake images
-                    self.writer.add_images('Real_Images', real_images, self.batch_count)
-                    self.writer.add_images('Fake_Images', fake_images.detach(), self.batch_count)  # Use detach() to avoid tracking computation
+                    self.writer.add_images(
+                        'Real_Images',
+                        real_images,
+                        self.batch_count)
+
+                    self.writer.add_images(
+                        'Fake_Images',
+                        fake_images.detach(),
+                        # Use detach() to avoid tracking computation
+                        self.batch_count)
 
                     # Log losses
-                    self.writer.add_scalar('Critic_Loss', c_loss.item(), self.batch_count)
-                    self.writer.add_scalar('Generator_Loss', g_loss.item(), self.batch_count)
-
+                    self.writer.add_scalar(
+                        'Critic_Loss',
+                        c_loss.item(),
+                        self.batch_count)
+                    self.writer.add_scalar(
+                        'Generator_Loss',
+                        g_loss.item(),
+                        self.batch_count)
 
                 # Checkpointing
                 self.batch_count += 1
                 if self.batch_count % self.save_interval == 0:
-                    self.checkpoint_handler.save(self.generator, self.critic, self.optimizerG, self.optimizerD, self.batch_count)
+                    self.checkpoint_handler.save(
+                        self.generator,
+                        self.critic,
+                        self.optimizerG,
+                        self.optimizerD,
+                        self.batch_count)
 
                 bar.set_description(f"critic loss: {criticloss/cnt}")
 
@@ -171,9 +195,9 @@ class Trainer:
                     self.save_model(self.generator, 'generator_model')
                     self.save_model(self.critic, 'critic_model')
 
-
             # Print epoch results
             print(f"Epoch Critic Loss: {c_loss.item()} | Generator Loss: {g_loss.item()}")
+
 
 if __name__ == "__main__":
     wgan = Trainer()
