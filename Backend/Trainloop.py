@@ -22,7 +22,6 @@ class Trainer:
 
         self.DATASET_DIR = r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project_Data\img_align_celeba\img_align_celeba"
 
-
         # Set device for training
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
