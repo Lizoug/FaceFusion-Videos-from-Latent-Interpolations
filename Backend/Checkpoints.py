@@ -1,5 +1,6 @@
 import torch
 
+
 class Checkpoint:
     def __init__(self, path):
         self.path = path
