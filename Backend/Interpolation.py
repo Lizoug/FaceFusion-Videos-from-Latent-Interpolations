@@ -79,7 +79,7 @@ def main(main, steps, gif_fps):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the entire pretrained Generator model
-    generator = torch.load(r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Model_128x128_end\generator_model_batch_3924000.pt")
+    generator = torch.load(r"./../../../Model_128x128_end/generator_model_batch_3924000.pt")
     generator.to(device).eval()
 
     # Base output directory
