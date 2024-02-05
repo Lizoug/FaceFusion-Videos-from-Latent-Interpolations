@@ -9,8 +9,15 @@ import re
 # seeds = [124, 120, 60, 620, 999, 541, 26]
 seeds = [120, 620]
 # Define directories
-model_dir = r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Model_128x128_end"
-output_dir_base = r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Generated_Images"
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Where the models are stored
+model_dir = os.path.abspath(os.path.join(current_dir, "../../../Model_128x128_end"))
+# Where the generated images should be saved
+output_dir_base = os.path.join("..", "Generated_Images")
+print("Absolute model directory:", os.path.abspath(model_dir))
+print("Absolute output directory base:", os.path.abspath(output_dir_base))
+
 
 # Size of the latent vector
 nz = 100
