@@ -3,6 +3,7 @@ Backend/interpolation_videos/*
 *.pt
 runs/
 *.mp4
+*.png
 
 # Ignore the new JSON and .ply files generated
 *.ply
