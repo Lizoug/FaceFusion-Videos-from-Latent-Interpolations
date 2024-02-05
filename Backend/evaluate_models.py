@@ -14,7 +14,7 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 # Where the models are stored
 model_dir = os.path.abspath(os.path.join(current_dir, "../../../Model_128x128_end"))
 # Where the generated images should be saved
-output_dir_base = os.path.join("..", "Generated_Images")
+output_dir_base = os.path.join("..", "All_Models_Generated_Images")
 print("Absolute model directory:", os.path.abspath(model_dir))
 print("Absolute output directory base:", os.path.abspath(output_dir_base))
 
