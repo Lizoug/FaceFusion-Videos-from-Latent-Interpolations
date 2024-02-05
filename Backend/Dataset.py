@@ -46,7 +46,9 @@ def transform(size):
 if __name__ == "__main__":
     IMG_SIZE = 128  # Set the image size
     # Directory where the dataset is located
-    DATASET_DIR = r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project_Data\img_align_celeba\img_align_celeba"
+    current_script_dir = os.path.dirname(__file__)  # Gets the directory of the current script
+    DATASET_DIR = os.path.join(current_script_dir, "../../../Project_Data/img_align_celeba/img_align_celeba")
+
 
     # Get the transformation pipelin
     transform_pipeline = transform(IMG_SIZE)
