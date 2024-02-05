@@ -20,7 +20,9 @@ class Trainer:
         self.ngf = 128
         self.ndf = 128
 
-        self.DATASET_DIR = r"C:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Project_Data\img_align_celeba\img_align_celeba"
+        # Define the dataset directory relatively to the current script location
+        current_script_dir = os.path.dirname(__file__)  # Gets the directory of the current script
+        self.DATASET_DIR = os.path.join(current_script_dir, "../../../Project_Data/img_align_celeba/img_align_celeba")
 
         # Set device for training
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
