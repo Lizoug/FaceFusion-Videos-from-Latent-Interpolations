@@ -42,13 +42,11 @@ def slerp(val, v1, v2):
     return scale_v1 * v1 + scale_v2 * v2
 
 
-# This function is used to convert a color image into grayscale format
 def create_video(image_folder, video_name, fps):
     images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
 
-    # Try using a different codec here
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
     video = cv2.VideoWriter(video_name, fourcc, fps, (width, height))
