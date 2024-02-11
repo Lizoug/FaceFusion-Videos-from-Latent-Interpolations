@@ -29,7 +29,34 @@ Follow these steps to get the project running on your local machine.
 Right-click on the folder and select "Git Bash here".
 
 #### 3. Clone the Repository
-by running:
-
  `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
+
+
+#### 4. You can now close the bash terminal and open Anaconda prompt
+
+### Installation
+#### 1. Open Anaconda Prompt
+
+#### 2. Create a New Conda Environment
+`conda create --name myenv python=3.8`
+
+#### 3. Activate the New Environment
+`conda activate myenv`
+
+#### 4. Navigate to the project directory 
+`cd dummy_folder/FaceFusion-Videos-from-Latent-Interpolations`
+
+#### 6. Install Requirements
+`pip install -r requirements.txt`
+
+#### 7. Run the download_model.py script to download the pre-trained models:
+`python download_model.py`
+
+### Running the Application
+
+#### 1. Navigate to the Frontend Directory
+`cd Frontend`
+
+#### 2. Run Streamlit Application
+`streamlit run app.py`
 
