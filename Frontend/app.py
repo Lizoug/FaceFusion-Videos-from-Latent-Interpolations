@@ -20,9 +20,8 @@ def sort_numerically(files):
     return sorted(files, key=extract_number)
 
 
-# Path to the model directory
 model_dir = os.path.abspath('../../Model_128x128_end')
-# Get list of model files and sort them numerically
+model_files = os.listdir(model_dir)
 model_selection = st.selectbox('Select a model', model_files)
 
 # User input for seeds
