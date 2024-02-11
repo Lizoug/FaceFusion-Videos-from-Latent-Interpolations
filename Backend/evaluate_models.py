@@ -84,7 +84,7 @@ if __name__ == "__main__":
     current_script_dir = os.path.dirname(__file__)
 
     # Define the model directory path relative to the current script
-    model_dir = os.path.abspath(os.path.join(current_script_dir, "../../../Model_128x128_end"))
+    model_dir = os.path.abspath(os.path.join(current_script_dir, "../../Model_128x128_end"))
 
     # Define the base output directory for saving generated images
     output_dir_base = os.path.join(current_script_dir, "../All_Models_Generated_Images")

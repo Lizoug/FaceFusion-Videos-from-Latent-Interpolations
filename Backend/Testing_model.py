@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 # Load the pre-trained Generator model and set it to evaluation mode
-generator = torch.load(r"./../../../Model_128x128_end/generator_model_batch_3924000.pt")
+generator = torch.load(r"./../../Model_128x128_end/generator_model_batch_3924000.pt")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 generator = generator.to(device)
 generator.eval()
