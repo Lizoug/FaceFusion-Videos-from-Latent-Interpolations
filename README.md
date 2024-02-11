@@ -16,7 +16,7 @@ Follow these steps to get the project running on your local machine.
 
 ### Prerequisites
 - Git
-- Anaconda
+- Anaconda <br>
   You can download Anaconda here :<br>
   https://www.anaconda.com/
 
