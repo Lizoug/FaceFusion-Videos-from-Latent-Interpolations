@@ -22,17 +22,14 @@ Follow these steps to get the project running on your local machine.
 
 ### Setup
 
-#### 1. Create a Dummy Folder
-
-Create a dummy folder on your desktop.
+#### 1. Create a Dummy Folder on your desktop.
 
 #### 2. Open Git Bash
 
 Right-click on the folder and select "Git Bash here".
 
 #### 3. Clone the Repository
+by running:
 
-Clone this repository by running:
-
-'git clone '
+ `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
 
