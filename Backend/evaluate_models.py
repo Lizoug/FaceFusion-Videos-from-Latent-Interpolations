@@ -3,58 +3,115 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import re
-
-# Define a list of seeds
-# seeds = [23, 59, 125, 200, 98, 126, 333, 100]
-# seeds = [124, 120, 60, 620, 999, 541, 26]
-seeds = [120, 620]
-# Define directories
-model_dir = r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Model_128x128_end"
-output_dir_base = r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Generated_Images"
-
-# Size of the latent vector
-nz = 100
-
-# Select device
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+import cv2
 
 
-# Function to save images
+# Function to generate images for a given list of seeds using pre-trained models
+def generate_images(seeds, model_dir, output_dir_base, device, nz):
+    # Iterate over each seed to generate images
+    for seed in seeds:
+        # Set the seed for PyTorch and NumPy to ensure reproducibility
+        torch.manual_seed(seed)
+        np.random.seed(seed)
+
+        # Create a fixed latent vector for the seed
+        fixed_vector = torch.randn(1, nz, device=device)
+
+        # Create an output directory specific to the current seed
+        output_dir = os.path.join(output_dir_base, f"seed_{seed}")
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Iterate over each model file in the model directory
+        for file in os.listdir(model_dir):
+            # Check if the file is a generator model file
+            if file.startswith("generator") and file.endswith(".pt"):
+                # Extract the batch number from the filename
+                batch_number = re.search(r"batch_(\d+)", file).group(1)
+                model_path = os.path.join(model_dir, file)
+
+                # Load the model and move it to the specified device
+                model = torch.load(model_path)
+                model = model.to(device)
+                model.eval()
+
+                # Generate an image using the model without calculating gradients
+                with torch.no_grad():
+                    generated_image = model(fixed_vector)
+
+                # Save the generated image using a predefined function
+                save_image(generated_image.squeeze(), output_dir, f"generator_batch_{batch_number}.png")
+
+
+def create_video(image_folder, video_name, fps):
+    # List all images, then sort them by the numerical value in their filename
+    images = sorted(os.listdir(image_folder), key=lambda x: int(re.findall(r'\d+', x)[0]))
+    
+    # Check if there are any images to process
+    if not images:
+        print("No images found in the folder.")
+        return
+
+    # Read the first image to set the video properties
+    frame = cv2.imread(os.path.join(image_folder, images[0]))
+    height, width, layers = frame.shape
+
+    # VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter(video_name, fourcc, fps, (width, height))
+
+    # Add images to the video
+    for image in images:
+        img_path = os.path.join(image_folder, image)
+        frame = cv2.imread(img_path)
+        video.write(frame)
+
+    video.release()
+    cv2.destroyAllWindows()
+
+
+# Function to save an image file
 def save_image(image, path, filename):
+    # Convert the tensor to a NumPy array and adjust its range to [0, 1]
     image = image.detach().cpu().numpy().transpose(1, 2, 0)
     image = (image + 1) / 2
+
+    # Save the image to the specified path using matplotlib
     plt.imsave(os.path.join(path, filename), image.clip(0, 1))
 
 
-# For each seed
-for seed in seeds:
-    # Set seed for reproducibility
-    torch.manual_seed(seed)
-    np.random.seed(seed)
+if __name__ == "__main__":
+    # Get the directory of the current script to build relative paths
+    current_script_dir = os.path.dirname(__file__)
 
-    # Generate a consistent random latent vector
-    fixed_vector = torch.randn(1, nz, device=device)
+    # Define the model directory path relative to the current script
+    model_dir = os.path.abspath(os.path.join(current_script_dir, "../../Model_128x128_end"))
 
-    # Create output directory for this seed
-    output_dir = os.path.join(output_dir_base, f"seed_{seed}")
-    os.makedirs(output_dir, exist_ok=True)
+    # Define the base output directory for saving generated images
+    output_dir_base = os.path.join(current_script_dir, "../All_Models_Generated_Images")
 
-    # For each model in the directory
-    for file in os.listdir(model_dir):
-        if file.startswith("generator") and file.endswith(".pt"):
-            # Extract batch number
-            batch_number = re.search(r"batch_(\d+)", file).group(1)
-            model_path = os.path.join(model_dir, file)
-            model = torch.load(model_path)
-            model = model.to(device)
-            model.eval()
+    # Select the computational device (GPU or CPU)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-            # Generate image
-            with torch.no_grad():
-                generated_image = model(fixed_vector)
+    # Size of the latent vector used by the generator model
+    nz = 100
 
-            # Save the generated image with batch number in the filename
-            save_image(
-                generated_image.squeeze(),
-                output_dir,
-                f"generator_batch_{batch_number}.png")
+    # Define the seeds to use for generating images
+    seeds = [124, 120, 60, 620, 999, 541, 26]
+
+    # Generate and save images for the defined seeds
+    #generate_images(seeds, model_dir, output_dir_base, device, nz)
+
+    # Specify the path to the folder containing images for a specific seed
+    image_folder_path = os.path.join(output_dir_base, "seed_124")
+
+    # Define the GIF directory and filename
+    video_directory = os.path.join(current_script_dir, "../All_Models_Generated_Images/video")
+    video_filename = "Model_eval.mp4"
+    video_path = os.path.join(video_directory, video_filename)
+
+    # Ensure the GIF directory exists
+    os.makedirs(video_directory, exist_ok=True)
+
+    
+    # Call create_video function after generating images
+    create_video(image_folder_path, video_path, 5)  # Adjust fps here

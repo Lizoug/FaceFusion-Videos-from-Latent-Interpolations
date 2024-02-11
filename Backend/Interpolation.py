@@ -42,13 +42,11 @@ def slerp(val, v1, v2):
     return scale_v1 * v1 + scale_v2 * v2
 
 
-# This function is used to convert a color image into grayscale format
 def create_video(image_folder, video_name, fps):
     images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
 
-    # Try using a different codec here
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
     video = cv2.VideoWriter(video_name, fourcc, fps, (width, height))
@@ -79,7 +77,7 @@ def main(main, steps, gif_fps):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the entire pretrained Generator model
-    generator = torch.load(r"c:\Users\lizak\Data_Science\Semester_5\Advanced_IS\Model_128x128_end\generator_model_batch_3924000.pt")
+    generator = torch.load(r"./../../Model_128x128_end/generator_model_batch_3654000.pt")
     generator.to(device).eval()
 
     # Base output directory
@@ -143,7 +141,7 @@ def main(main, steps, gif_fps):
 
 if __name__ == "__main__":
     # seeds = [(1, 2), (60, 80), (333, 666)]  #  all the seed pairs
-    seeds = [(np.random.randint(0, 500), np.random.randint(0, 1000)) for _ in range(50)]
+    seeds = [(np.random.randint(0, 500), np.random.randint(0, 1000)) for _ in range(20)]
 
     steps = 50  # Fewer steps to make the process faster
     # video_fps = 60  # Frame rate for video
