@@ -1,6 +1,7 @@
 All_Models_Generated_Images/
 Backend/interpolation_videos/*
 Frontend/interpolation_videos/*
+Backend/Model_128x128/
 *.pt
 runs/
 *.mp4
