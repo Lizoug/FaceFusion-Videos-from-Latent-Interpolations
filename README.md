@@ -9,7 +9,7 @@
 ## Introduction
 This project focuses on creating animations using generative models by interpolating in the latent space. These animations take the form of smooth transitions between various generated images, resulting in GIFs that showcase the capabilities of the trained model.
 
-![Example GIF](Link_to_Your_GIF)
+![Example GIF](C:\Users\lizak\OneDrive\Desktop\interpolation_videos\gifs\bests\latent_space_exploration_seed_147_to_244.gif)
 
 ## Getting Started Locally
 Follow these steps to get the project running on your local machine.
