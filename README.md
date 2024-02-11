@@ -31,8 +31,9 @@ Follow these steps to get the project running on your local machine.
 
 1. **Create a Dummy Folder** on your desktop.
 2. **Open Git Bash** by right-clicking on the folder and selecting "Git Bash here".
-3. **Clone the Repository**: `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
-4. **Close Git Bash** and open Anaconda Prompt.
+3. **Clone the Repository**:
+   `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
+5. **Close Git Bash** and open Anaconda Prompt.
 
 ### Installation
 #### 1. Open Anaconda Prompt
