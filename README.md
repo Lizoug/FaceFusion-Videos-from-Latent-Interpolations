@@ -35,23 +35,19 @@ Follow these steps to get the project running on your local machine.
    `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
 5. **Close Git Bash** and open Anaconda Prompt.
 
-### Installation
-#### 1. Open Anaconda Prompt
+### Installation 🔧
 
-#### 2. Create a New Conda Environment
-`conda create --name myenv python=3.8`
-
-#### 3. Activate the New Environment
-`conda activate myenv`
-
-#### 4. Navigate to the project directory 
-`cd dummy_folder/FaceFusion-Videos-from-Latent-Interpolations`
-
-#### 5. Install Requirements
-`pip install -r requirements.txt`
-
-#### 6. Run the download_model.py script to download the pre-trained models:
-`python download_model.py`
+1. **Open Anaconda Prompt**.
+2. **Create a New Conda Environment**: <br>
+  `conda create --name myenv python=3.8`
+3. **Activate the New Environment**: <br>
+  `conda activate myenv`
+4. **Navigate to the Project Directory**: <br>
+  `cd path_to_dummy_folder/FaceFusion-Videos-from-Latent-Interpolations`
+5. **Install Requirements**: <br>
+  `pip install -r requirements.txt`
+6. **Download Pre-Trained Models**: <br>
+  `python download_model.py`
 
 ### Running the Application
 
