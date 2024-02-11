@@ -6,7 +6,7 @@
 ![image](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
 
 
-## Introduction
+## Introduction 🚀
 This project focuses on creating animations using generative models by interpolating in the latent space. These animations take the form of smooth transitions between various generated images, resulting in GIFs that showcase the capabilities of the trained model.
 
 <p float="left">
@@ -19,28 +19,20 @@ This project focuses on creating animations using generative models by interpola
 </p>
 
 
-## Getting Started Locally
+## Getting Started Locally 💻
 Follow these steps to get the project running on your local machine.
 
 ### Prerequisites
-- Git
-- Anaconda <br>
-  You can download Anaconda here :<br>
-  https://www.anaconda.com/
+- **Git**: Version control system
+- **Anaconda**: Open-source distribution for Python/R
+  - Download Anaconda [here](https://www.anaconda.com/).
 
-### Setup
+### Setup 🛠️
 
-#### 1. Create a Dummy Folder on your desktop.
-
-#### 2. Open Git Bash
-
-Right-click on the folder and select "Git Bash here".
-
-#### 3. Clone the Repository
- `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
-
-
-#### 4. You can now close the bash terminal and open Anaconda prompt
+1. **Create a Dummy Folder** on your desktop.
+2. **Open Git Bash** by right-clicking on the folder and selecting "Git Bash here".
+3. **Clone the Repository**: `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
+4. **Close Git Bash** and open Anaconda Prompt.
 
 ### Installation
 #### 1. Open Anaconda Prompt
@@ -54,10 +46,10 @@ Right-click on the folder and select "Git Bash here".
 #### 4. Navigate to the project directory 
 `cd dummy_folder/FaceFusion-Videos-from-Latent-Interpolations`
 
-#### 6. Install Requirements
+#### 5. Install Requirements
 `pip install -r requirements.txt`
 
-#### 7. Run the download_model.py script to download the pre-trained models:
+#### 6. Run the download_model.py script to download the pre-trained models:
 `python download_model.py`
 
 ### Running the Application
