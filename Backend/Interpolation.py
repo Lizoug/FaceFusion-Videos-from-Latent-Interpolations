@@ -77,7 +77,7 @@ def main(main, steps, gif_fps):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the entire pretrained Generator model
-    generator = torch.load(r"./../../../Model_128x128_end/generator_model_batch_3924000.pt")
+    generator = torch.load(r"./../../../Model_128x128_end/generator_model_batch_3654000.pt")
     generator.to(device).eval()
 
     # Base output directory
@@ -141,7 +141,7 @@ def main(main, steps, gif_fps):
 
 if __name__ == "__main__":
     # seeds = [(1, 2), (60, 80), (333, 666)]  #  all the seed pairs
-    seeds = [(np.random.randint(0, 500), np.random.randint(0, 1000)) for _ in range(50)]
+    seeds = [(np.random.randint(0, 500), np.random.randint(0, 1000)) for _ in range(20)]
 
     steps = 50  # Fewer steps to make the process faster
     # video_fps = 60  # Frame rate for video

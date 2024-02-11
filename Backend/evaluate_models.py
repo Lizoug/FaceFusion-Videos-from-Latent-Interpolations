@@ -1,6 +1,5 @@
 import torch
 import numpy as np
-from Interpolation import create_gif
 import matplotlib.pyplot as plt
 import os
 import re
@@ -44,19 +43,30 @@ def generate_images(seeds, model_dir, output_dir_base, device, nz):
 
 
 def create_video(image_folder, video_name, fps):
-    images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
+    # List all images, then sort them by the numerical value in their filename
+    images = sorted(os.listdir(image_folder), key=lambda x: int(re.findall(r'\d+', x)[0]))
+    
+    # Check if there are any images to process
+    if not images:
+        print("No images found in the folder.")
+        return
+
+    # Read the first image to set the video properties
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
 
+    # VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-
     video = cv2.VideoWriter(video_name, fourcc, fps, (width, height))
 
+    # Add images to the video
     for image in images:
-        video.write(cv2.imread(os.path.join(image_folder, image)))
+        img_path = os.path.join(image_folder, image)
+        frame = cv2.imread(img_path)
+        video.write(frame)
 
-    cv2.destroyAllWindows()
     video.release()
+    cv2.destroyAllWindows()
 
 
 # Function to save an image file
@@ -104,4 +114,4 @@ if __name__ == "__main__":
 
     
     # Call create_video function after generating images
-    create_video(image_folder_path, video_path, 5)  # Adjust fps as needed
+    create_video(image_folder_path, video_path, 5)  # Adjust fps here
