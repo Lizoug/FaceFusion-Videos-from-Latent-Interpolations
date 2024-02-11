@@ -18,6 +18,17 @@ This project focuses on creating animations using generative models by interpola
   <img src="bests/latent_space_exploration_seed_87_to_520.gif" width="140" />
 </p>
 
+---
+
+## Table of Contents 📖
+1. [Introduction](#introduction-)
+2. [Getting Started Locally](#getting-started-locally-)
+3. [Prerequisites](#prerequisites)
+4. [Setup](#setup)
+5. [Installation](#installation)
+6. [Running the Application](#running-the-application)
+
+---
 
 ## Getting Started Locally 💻
 Follow these steps to get the project running on your local machine.
