@@ -1,4 +1,4 @@
-generated_images/
+All_Models_Generated_Images/
 Backend/interpolation_videos/*
 *.pt
 runs/
