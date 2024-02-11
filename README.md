@@ -60,11 +60,8 @@ Follow these steps to get the project running on your local machine.
 6. **Download Pre-Trained Models**: <br>
   `python download_model.py`
 
-### Running the Application
-
-#### 1. Navigate to the Frontend Directory
-`cd Frontend`
-
-#### 2. Run Streamlit Application
-`streamlit run app.py`
-
+### Running the Application 🏃🏽‍♀️
+1. Navigate to the Frontend Directory <br>
+  `cd Frontend`
+2. Run Streamlit Application <br>
+  `streamlit run app.py`
