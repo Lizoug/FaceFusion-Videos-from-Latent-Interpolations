@@ -7,7 +7,7 @@
 
 
 ## Introduction 🚀
-This project focuses on creating animations using generative models by interpolating in the latent space. These animations take the form of smooth transitions between various generated images, resulting in GIFs that showcase the capabilities of the trained model.
+This project focuses on creating animations using WGANs by interpolating in the latent space. These animations take the form of smooth transitions between various generated images, resulting in GIFs that showcase the capabilities of the trained model.
 
 <p float="left">
   <img src="bests/latent_space_exploration_seed_147_to_244.gif" width="140" />
