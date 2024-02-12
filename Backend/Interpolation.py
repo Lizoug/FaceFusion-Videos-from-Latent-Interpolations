@@ -77,7 +77,7 @@ def main(seed1, seed2, steps, gif_fps, model_path):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the entire pretrained Generator model
-    generator = torch.load(model_path)
+    generator = torch.load(model_path, map_location=torch.device('cpu'))
     generator.to(device).eval()
 
     # Base output directory
