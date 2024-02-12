@@ -58,11 +58,12 @@ Follow these steps to get the project running on your local machine.
 5. **Install Requirements**: <br>
   `pip install -r requirements.txt`
 6. **Download Pre-Trained Models**: <br>
-  `cd Backend`
+  `cd Backend` <br>
   `python download_model.py`
 
 ### Running the Application 🏃🏽‍♀️
 1. Navigate to the Frontend Directory <br>
+  `cd ..` <br>
   `cd Frontend`
 2. Run Streamlit Application <br>
   `streamlit run app.py`
