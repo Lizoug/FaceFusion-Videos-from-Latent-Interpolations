@@ -58,6 +58,7 @@ Follow these steps to get the project running on your local machine.
 5. **Install Requirements**: <br>
   `pip install -r requirements.txt`
 6. **Download Pre-Trained Models**: <br>
+  `cd Backend`
   `python download_model.py`
 
 ### Running the Application 🏃🏽‍♀️
