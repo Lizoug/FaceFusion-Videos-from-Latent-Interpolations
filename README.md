@@ -43,27 +43,43 @@ Follow these steps to get the project running on your local machine.
 1. **Create a Dummy Folder** on your desktop.
 2. **Open Git Bash** by right-clicking on the folder and selecting "Git Bash here".
 3. **Clone the Repository**: <br>
-   `git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
-5. **Close Git Bash** and open Anaconda Prompt.
+```bash
+git clone https://github.com/Lizoug/FaceFusion-Videos-from-Latent-Interpolations.git`
+```
+4. **Close Git Bash** and open Anaconda Prompt.
 
 ### Installation 🔧
 
 1. **Open Anaconda Prompt**.
 2. **Create a New Conda Environment**: <br>
-  `conda create --name myenv python=3.8`
+```bash
+conda create --name myenv python=3.8
+```
 3. **Activate the New Environment**: <br>
-  `conda activate myenv`
+```bash
+conda activate myenv
+```
 4. **Navigate to the Project Directory**: <br>
-  `cd path_to_dummy_folder/FaceFusion-Videos-from-Latent-Interpolations`
+```bash
+cd path_to_dummy_folder/FaceFusion-Videos-from-Latent-Interpolations
+```
 5. **Install Requirements**: <br>
-  `pip install -r requirements.txt`
+```bash
+pip install -r requirements.txt
+```
 6. **Download Pre-Trained Models**: <br>
-  `cd Backend` <br>
-  `python download_model.py`
+```bash
+cd Backend <br>
+python download_model.py
+```
 
 ### Running the Application 🏃🏽‍♀️
 1. Navigate to the Frontend Directory <br>
-  `cd ..` <br>
-  `cd Frontend`
+```bash
+cd .. <br>
+cd Frontend
+```
 2. Run Streamlit Application <br>
-  `streamlit run app.py`
+```bash
+streamlit run app.py
+```
