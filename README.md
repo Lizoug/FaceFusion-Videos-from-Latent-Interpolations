@@ -69,14 +69,14 @@ pip install -r requirements.txt
 ```
 6. **Download Pre-Trained Models**: <br>
 ```bash
-cd Backend <br>
+cd Backend
 python download_model.py
 ```
 
 ### Running the Application 🏃🏽‍♀️
 1. Navigate to the Frontend Directory <br>
 ```bash
-cd .. <br>
+cd ..
 cd Frontend
 ```
 2. Run Streamlit Application <br>
