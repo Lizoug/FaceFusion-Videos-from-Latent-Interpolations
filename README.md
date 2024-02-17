@@ -10,12 +10,12 @@
 This project focuses on creating animations using WGANs by interpolating in the latent space. These animations take the form of smooth transitions between various generated images, resulting in GIFs that showcase the capabilities of the trained model.
 
 <p float="left">
-  <img src="bests/latent_space_exploration_seed_147_to_244.gif" width="140" />
-  <img src="bests/latent_space_exploration_seed_165_to_203.gif" width="140" />
-  <img src="bests/latent_space_exploration_seed_225_to_692.gif" width="140" />
-  <img src="bests/latent_space_exploration_seed_301_to_952.gif" width="140" />
-  <img src="bests/latent_space_exploration_seed_468_to_675.gif" width="140" />
-  <img src="bests/latent_space_exploration_seed_87_to_520.gif" width="140" />
+  <img src="readme_assets/latent_space_exploration_seed_147_to_244.gif" width="140" />
+  <img src="readme_assets/latent_space_exploration_seed_165_to_203.gif" width="140" />
+  <img src="readme_assets/latent_space_exploration_seed_225_to_692.gif" width="140" />
+  <img src="readme_assets/latent_space_exploration_seed_301_to_952.gif" width="140" />
+  <img src="readme_assets/latent_space_exploration_seed_468_to_675.gif" width="140" />
+  <img src="readme_assets/latent_space_exploration_seed_87_to_520.gif" width="140" />
 </p>
 
 ---
