@@ -27,8 +27,11 @@ model_selection = st.selectbox('Select a model', model_files)
 # User input for seeds
 seed1 = st.number_input('Seed 1', min_value=0, max_value=10000, value=1)
 seed2 = st.number_input('Seed 2', min_value=0, max_value=10000, value=2)
-steps = 50
-gif_fps = 20
+steps = st.number_input('steps', min_value=0, max_value=500)
+gif_fps = st.number_input('gif_fps', min_value=0, max_value=500)
+
+#steps = 50
+#gif_fps = 20
 
 if st.button('Generate GIF'):
     # Create full path to selected model
