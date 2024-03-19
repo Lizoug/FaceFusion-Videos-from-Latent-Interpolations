@@ -5,6 +5,7 @@
 
 ![image](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
 
+[Grading PDF](./readme_assets/GutachtenLiza.pdf)
 
 ## Introduction 🚀
 This project focuses on creating animations using WGANs by interpolating in the latent space. These animations take the form of smooth transitions between various generated images, resulting in GIFs that showcase the capabilities of the trained model.
